@@ -50,7 +50,7 @@ public class SAConfettiView: UIView {
         emitter = CAEmitterLayer()
         
         emitter.emitterPosition = CGPoint(x: frame.size.width / 2.0, y: 0)
-        emitter.emitterShape = kCAEmitterLayerLine
+        emitter.emitterShape = CAEmitterLayerEmitterShape.line
         emitter.emitterSize = CGSize(width: frame.size.width, height: 1)
         
         var cells = [CAEmitterCell]()
@@ -104,8 +104,8 @@ public class SAConfettiView: UIView {
         confetti.color = color.cgColor
         confetti.velocity = CGFloat(350.0 * intensity)
         confetti.velocityRange = CGFloat(80.0 * intensity)
-        confetti.emissionLongitude = CGFloat(M_PI)
-        confetti.emissionRange = CGFloat(M_PI_4)
+        confetti.emissionLongitude = .pi / 4
+        confetti.emissionRange = .pi / 4
         confetti.spin = CGFloat(3.5 * intensity)
         confetti.spinRange = CGFloat(4.0 * intensity)
         confetti.scaleRange = CGFloat(intensity)
