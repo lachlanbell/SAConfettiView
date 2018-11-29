@@ -12,18 +12,18 @@ import QuartzCore
 public class SAConfettiView: UIView {
     
     public enum ConfettiType {
-        case Confetti
-        case Triangle
-        case Star
-        case Diamond
-        case Image(UIImage)
+        case confetti
+        case triangle
+        case star
+        case diamond
+        case image(UIImage)
     }
     
     var emitter: CAEmitterLayer!
     public var colors: [UIColor]!
     public var intensity: Float!
     public var type: ConfettiType!
-    private var active :Bool!
+    public private(set) var active :Bool!
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -42,7 +42,7 @@ public class SAConfettiView: UIView {
                   UIColor(red:0.30, green:0.76, blue:0.85, alpha:1.0),
                   UIColor(red:0.58, green:0.39, blue:0.55, alpha:1.0)]
         intensity = 0.5
-        type = .Confetti
+        type = .confetti
         active = false
     }
     
@@ -73,15 +73,15 @@ public class SAConfettiView: UIView {
         var fileName: String!
         
         switch type {
-        case .Confetti:
+        case .confetti:
             fileName = "confetti"
-        case .Triangle:
+        case .triangle:
             fileName = "triangle"
-        case .Star:
+        case .star:
             fileName = "star"
-        case .Diamond:
+        case .diamond:
             fileName = "diamond"
-        case let .Image(customImage):
+        case let .image(customImage):
             return customImage
         }
         
@@ -89,9 +89,11 @@ public class SAConfettiView: UIView {
         let bundle = Bundle(path: path!)
         let imagePath = bundle?.path(forResource: fileName, ofType: "png")
         let url = URL(fileURLWithPath: imagePath!)
-        let data = NSData(contentsOf: url)
-        if let data = data {
-            return UIImage(data: data as Data)!
+        do {
+            let data = try Data(contentsOf: url)
+            return UIImage(data: data)
+        } catch {
+            print(error)
         }
         return nil
     }
@@ -104,8 +106,8 @@ public class SAConfettiView: UIView {
         confetti.color = color.cgColor
         confetti.velocity = CGFloat(350.0 * intensity)
         confetti.velocityRange = CGFloat(80.0 * intensity)
-        confetti.emissionLongitude = .pi / 4
-        confetti.emissionRange = .pi / 4
+        confetti.emissionLongitude = CGFloat(Double.pi)
+        confetti.emissionRange = CGFloat(Double.pi)
         confetti.spin = CGFloat(3.5 * intensity)
         confetti.spinRange = CGFloat(4.0 * intensity)
         confetti.scaleRange = CGFloat(intensity)
@@ -114,8 +116,8 @@ public class SAConfettiView: UIView {
         return confetti
     }
     
+    @available(*, deprecated, message: "Use 'active' property instead")
     public func isActive() -> Bool {
         return self.active
     }
 }
-
